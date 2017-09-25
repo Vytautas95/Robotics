@@ -4,8 +4,9 @@
 #pragma config(Motor,  port3,           leftMotor,     tmotorNormal, openLoop, reversed)
 
 int distance = 573; // half a meter distance calculated with chaft encoders
-float oneDegree = 113.097/31.41; // How far the wheels have to go for 1 degree
+float someDegree = 113.097/31.41; // How far the wheels have to go for 1 degree
 float degree;
+float oneDegree = someDegree - 0.9; // fix the distance for one degree
 void drive_forward() // function for driving forward using distance
 {
 	while(abs(SensorValue[rightEncoder]) < distance)
