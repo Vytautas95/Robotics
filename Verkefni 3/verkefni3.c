@@ -3,7 +3,21 @@
 #pragma config(Motor,  port7,           armMotor,      tmotorNormal, openLoop)
 #pragma config(Motor,  port6,           clawMotor,     tmotorVex269, openLoop, reversed)
 bool killswitch = false;//Bool sem er notud fyrir hvort thad se buid ad yta a Btn7U
-
+/*----------------------------------------------------------------------------------------------------*\
+|*                                  - Keyra velmennid med fjarstyringu -                              *|
+|*                                      ROBOTC on VEX 2.0 Cortex                                      *|
+|*                                                                                                    *|
+|*  I thessu forriti er verid ad vinna med fjastyringu sem haegt er ad nota arminn og kloina asamt    *|
+|*    thvi ad vinstri joystickinn stjornar vinstri motor og haegri joystick stjornar haegri motor     *|
+|*                                                                                                    *|
+|*                                        ROBOT CONFIGURATION                                         *|
+|*                                                                                                    *|
+|*    MOTORS & SENSORS:                                                                               *|
+|*    [I/O Port]              [Name]              [Type]              [Description]                   *|
+|*    Digital 11              sonarSensor         VEX Sonar Sensor    Front mounted, front facing     *|
+|*    Motor - Port 2          leftMotor           VEX Motor           Left motor                      *|
+|*    Motor - Port 3          rightMotor          VEX Motor           Right motor                     *|
+\*-----------------------------------------------------------------------------------------------4246-*/
 task main()
 {
   while(killswitch == false) {   //While loop sem er keyrd a medan boolid er false
