@@ -1,0 +1,16 @@
+Sonar Output: 12
+Sonar Input: 11
+Limit Switch: 10
+Bumper Switch: 9
+Line Sensor Right: analog 1
+Line Sensor Mid: analog 2
+Line Sensor Left: analog 3
+Light Sensor: analog 4
+Shaft Encoder Right: 8, 7
+Shaft Encoder Left: 6, 5
+Potentiometer: 2
+
+ummál hrings.
+U = 2 * pi * radius.
+U = 32.044cm
+ 
