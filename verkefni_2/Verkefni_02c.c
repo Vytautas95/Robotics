@@ -3,6 +3,7 @@
 #pragma config(Motor,  port2,           rightMotor,    tmotorNormal, openLoop)
 #pragma config(Motor,  port3,           leftMotor,     tmotorNormal, openLoop, reversed)
 
+//Make the robot go, forward for half a meter, turn left, forward half a meter, turn right, forward half a meter, turn right, than go forward half a meter
 int distance = 573; // half a meter distance calculated with chaft encoders
 float someDegree = 113.097/31.41; // How far the wheels have to go for 1 degree
 float degree;
