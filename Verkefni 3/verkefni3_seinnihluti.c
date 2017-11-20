@@ -94,25 +94,31 @@ void turnleft(int degrees) //function for turning right
 task main()
 {
 	bool killswitch = false;
-	while(killswitch == false)
-	{
+	wait1Msec(2000);                  // Wait 2000 milliseconds before continuing.
+	nullEncoder();  //reset the encoder inbetween every movement
+  	while(abs(SensorValue[rightEncoder]) < distance && killswitch == false) // drive forward for half a meter
+  	{
 		if(vexRT[Btn7U] == 1 || SensorValue(touchSensor) == 1)
 		{
 			killswitch = true;
+			StopAllTasks(); // this ends the program
+
 		}
-		wait1Msec(2000);                  // Wait 2000 milliseconds before continuing.
-		nullEncoder();  //reset the encoder inbetween every movement
-  	while(abs(SensorValue[rightEncoder]) < distance) // drive forward for half a meter
-  	{
   		drive_forward();
   	}
   	stop_motor(); 	//stop the motor for hald a second between every movement
-		nullEncoder();
- 	  turnleft(90);	//turn around itself for 90 degrees
+	nullEncoder();
+ 	turnleft(90);	//turn around itself for 90 degrees
   	stop_motor();
   	nullEncoder();
-  	while(abs(SensorValue[rightEncoder]) < distance)
+  	while(abs(SensorValue[rightEncoder]) < distance && killswitch == false)
   	{
+		if(vexRT[Btn7U] == 1 || SensorValue(touchSensor) == 1)
+		{
+			killswitch = true;
+			StopAllTasks(); // this ends the program
+
+		}
   		drive_forward();
   	}
   	stop_motor();
@@ -120,8 +126,14 @@ task main()
   	turnright(90); // turn right around itself than just rince and repeat
   	stop_motor();
   	nullEncoder();
-  	while(abs(SensorValue[rightEncoder]) < distance)
+  	while(abs(SensorValue[rightEncoder]) < distance && killswitch == false)
 		{
+		if(vexRT[Btn7U] == 1 || SensorValue(touchSensor) == 1)
+		{
+			killswitch = true;
+			StopAllTasks(); // this ends the program
+
+		}
   		drive_forward();
   	}
   	stop_motor();
@@ -129,8 +141,14 @@ task main()
   	turnright(90);
   	stop_motor();
  		nullEncoder();
-  	while(abs(SensorValue[rightEncoder]) < distance)
+  	while(abs(SensorValue[rightEncoder]) < distance && killswitch == false)
   	{
+		if(vexRT[Btn7U] == 1 || SensorValue(touchSensor) == 1)
+		{
+			killswitch = true;
+			StopAllTasks(); // this ends the program
+
+		}
   		drive_forward();
   	}
   	motor[rightMotor] = 0;            /* Stop the motors once desired */
