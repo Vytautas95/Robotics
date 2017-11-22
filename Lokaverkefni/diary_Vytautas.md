@@ -1,2 +1,3 @@
 ## Diary ##
-**11/20/2017**
+**11/22/2017**
+Created the project description
