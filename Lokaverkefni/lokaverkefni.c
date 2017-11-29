@@ -22,12 +22,60 @@
 \*----------------------------------------------------------------------------------------------4246-*/
 
 
-int highpower = 127;
+int highpower = 50;
 int lowpower = 30;
 int nopower = 0;
+int distance = 50;
+int knockDistance = 20;
+void find()
+{
+	while(SensorValue[sonarSensor] > distance)
+	{
+		motor[leftMotor] = lowpower;
+		motor[rightMotor] = -lowpower;
+	}
+}
+void stopMotors()
+{
+	motor[leftMotor] = nopower;
+	motor[rightMotor] = nopower;
+}
+void reach()
+{
+	while(SensorValue[sonarSensor] > knockDistance)
+	{
+		motor[leftMotor] = highpower;
+		motor[rightMotor] = highpower;
+	}
+}
+void knock()
+{
+	motor[leftMotor] = lowpower;
+	motor[rightMotor] = -lowpower;
+	wait1Msec(500);
+	stopMotors();
+	motor[armMotor] = -highpower;
+	wait1Msec(1000);
+	motor[armMotor] = nopower;
+	wait1Msec(1000);
+	motor[leftMotor] = -lowpower;
+	motor[rightMotor] = lowpower;
+	wait1Msec(1000);
+	stopMotors();
+	motor[armMotor] = highpower;
+	wait1Msec(1000);
+	motor[armMotor] = nopower;
+}
 task main()
 {
-
-
+	wait1Msec(1000);
+	while(1 == 1)
+	{
+		find();
+		stopMotors();
+		reach();
+		stopMotors();
+		knock();
+	}
 
 }
