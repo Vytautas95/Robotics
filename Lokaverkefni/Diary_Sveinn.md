@@ -7,4 +7,9 @@ Things that I added or moved are battery straps and moved the sonar sensor to th
 **27/11/2017**
 
 We setup the program file and the flowchart for the assignment. 
-Put header and connected all the components we'll be using,. 
+Put header and connected all the components we'll be using.
+
+**29/11/2017**
+
+We relocated the sonar sensor because it read the line follower that was under it. Started coding the program today.
+
