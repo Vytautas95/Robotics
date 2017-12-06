@@ -35,7 +35,7 @@ int nopower = 0;
 int distance = 50;
 int knockDistance = 20;
 int counter = 0;
-int threshold = 2575;
+int threshold = 2100;
 float someDegree = 113.097/31.41; // How far the wheels have to go for 1 degree
 float oneDegree = someDegree - 0.5; // fix the distance for one degree
 float degree;
@@ -54,7 +54,7 @@ void stopMotors()
 }
 void reach()
 {
-	while(SensorValue[sonarSensor] > knockDistance)
+	while(SensorValue[sonarSensor] > knockDistance && SensorValue[lineFollowerCENTER] > threshold)
 	{
 		motor[leftMotor] = highpower;
 		motor[rightMotor] = highpower;
@@ -89,17 +89,7 @@ void knock()
 	}
 	motor[armMotor] = nopower;
 }
-task tof()	{
-	while(true)
-	{
-		if(SensorValue[lineFollowerCENTER] > threshold) {
-				StopTask();
-      	SensorValue[rightEncoder]  = 0;
-      	turnright(170);
-      	StartTask();
-		}
-	}
-}
+
 task e_stop()
 {
 	while(true) {
@@ -109,20 +99,47 @@ task e_stop()
 		wait1Msec(10);
   }
 }
+task adal()
+{
+
+
+
+
+}
+task tof()	{
+	while(true)
+	{
+		if(SensorValue[lineFollowerCENTER] > threshold) {
+				StopTask(adal);
+				wait1Msec(2000);
+      	/*SensorValue[rightEncoder]  = 0;
+      	turnright(170);*/
+      	StartTask(adal);
+		}
+		wait1Msec(10);
+	}
+}
+
 task main()
 {
-	StartTask(tof);
-	StartTask(e_stop);
 	wait1Msec(10000);
-	while(counter < 3)
+	StartTask(e_stop);
+  while(counter < 3)
 	{
 		find();
 		stopMotors();
 		reach();
-		stopMotors();
-		knock();
-		counter++;
-
+		if(SensorValue[sonarSensor] < knockDistance){
+			stopMotors();
+			knock();
+			counter++;
+		}
+			else if(SensorValue[lineFollowerCENTER] < threshold) {
+      	SensorValue[rightEncoder]  = 0;
+      	turnright(170);
+      	motor[leftMotor] = highpower;
+      	motor[rightMotor] = highpower;
+      	wait1Msec(500);
+		}
 	}
-
 }
