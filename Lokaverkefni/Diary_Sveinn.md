@@ -13,3 +13,8 @@ Put header and connected all the components we'll be using.
 
 We relocated the sonar sensor because it read the line follower that was under it. Started coding the program today.
 
+**4/12/2017**
+
+We made some functions for the program, find(), stopMotors(), reach(), turnRight(int degree) and knock().
+
+**4/12/2017**
