@@ -18,3 +18,5 @@ We relocated the sonar sensor because it read the line follower that was under i
 We made some functions for the program, find(), stopMotors(), reach(), turnRight(int degree) and knock().
 
 **6/12/2017**
+
+Changed the code so we use only two tasks, the main task and the stopper task.
