@@ -28,17 +28,18 @@
 |*    Digital - Port 5     sonarSensor         VEX Sonar Sensor      Front mounted, front facing     *|
 \*----------------------------------------------------------------------------------------------4246-*/
 
-
-int highpower = 50;
-int lowpower = 30;
+// Create all the variables used within the code
+int highpower = 35;
+int lowpower = 24;
 int nopower = 0;
-int distance = 50;
-int knockDistance = 20;
+int distance = 45;
+int knockDistance = 15;
 int counter = 0;
-int threshold = 2100;
+int threshold = 2250;
 float someDegree = 113.097/31.41; // How far the wheels have to go for 1 degree
 float oneDegree = someDegree - 0.5; // fix the distance for one degree
 float degree;
+// Function that turns around until it finds an object
 void find()
 {
 	while(SensorValue[sonarSensor] > distance)
@@ -52,13 +53,16 @@ void stopMotors()
 	motor[leftMotor] = nopower;
 	motor[rightMotor] = nopower;
 }
+// function that goes forward towards the object until it's in range to knock it down or it goes over black surface (out of play area)
 void reach()
 {
-	while(SensorValue[sonarSensor] > knockDistance && SensorValue[lineFollowerCENTER] > threshold)
+	while(SensorValue[sonarSensor] > knockDistance && SensorValue[lineFollowerCENTER] < threshold)
 	{
+		stopMotors();
 		motor[leftMotor] = highpower;
 		motor[rightMotor] = highpower;
 	}
+// function that turns to the right by the amount of degrees spesified when the function is called
 }
 void turnright(int degrees) //function for turning right
 {
@@ -66,30 +70,35 @@ void turnright(int degrees) //function for turning right
 	while(abs(SensorValue[rightEncoder]) < degree) // While the right encoder is less than distance:
   {
 		// spins right around itself
-		motor[rightMotor] = -63;		    // Right Motor is run at power level -63
-		motor[leftMotor]  = 63;		    // Left Motor is run at power level 63
+		motor[rightMotor] = -highpower;		 
+		motor[leftMotor]  = highpower;		  
   }
 }
+//Function that knocks down the object in front of it
 void knock()
 {
-	motor[leftMotor] = lowpower;
-	motor[rightMotor] = -lowpower;
+	// turns for a bit
+	motor[leftMotor] = -lowpower;
+	motor[rightMotor] = lowpower;
 	wait1Msec(500);
 	stopMotors();
+	// Lowers arm 
 	while (SensorValue[mypot] > 1) {
 		motor[armMotor] = -highpower;
 	}
 	motor[armMotor] = nopower;
-	motor[leftMotor] = -highpower;
-	motor[rightMotor] = highpower;
-	wait1Msec(1000);
+	// Turns again to knock the object with the arm
+	motor[leftMotor] = highpower;
+	motor[rightMotor] = -highpower;
+	wait1Msec(1500);
 	stopMotors();
+	//Raises the arm again
 	while (SensorValue[mypot] < 700) {
 		motor[armMotor] = highpower;
 	}
 	motor[armMotor] = nopower;
 }
-
+//Create a task that runs alongside the main program and checks whether a button is pressed, if the button is pressed it ends all programs (killswitch) 
 task e_stop()
 {
 	while(true) {
@@ -99,47 +108,36 @@ task e_stop()
 		wait1Msec(10);
   }
 }
-task adal()
-{
-
-
-
-
-}
-task tof()	{
-	while(true)
-	{
-		if(SensorValue[lineFollowerCENTER] > threshold) {
-				StopTask(adal);
-				wait1Msec(2000);
-      	/*SensorValue[rightEncoder]  = 0;
-      	turnright(170);*/
-      	StartTask(adal);
-		}
-		wait1Msec(10);
-	}
-}
-
 task main()
 {
-	wait1Msec(10000);
+	//Let the robot wait for 20 seconds before it starts
+	wait1Msec(20000);
 	StartTask(e_stop);
+	//Counts 3 objects that it has to knock over before it's mission is done
   while(counter < 3)
 	{
 		find();
+		//A little fix to have the robot position correctly after finding the target
+		wait1Msec(150);
 		stopMotors();
 		reach();
-		if(SensorValue[sonarSensor] < knockDistance){
+		//While in reach 2 things can happen
+		//1. It leaves the play area (leaves white surface) and has to turn around and drive back into the play area
+		if(SensorValue[lineFollowerCENTER] > threshold) {
+			motor[leftMotor] = nopower;
+			motor[rightMotor] = nopower;
+      SensorValue[rightEncoder]  = 0;
+      turnright(120);
+      motor[leftMotor] = highpower;
+      motor[rightMotor] = highpower;
+      wait1Msec(500);
+		}
+		//2. It reaches close enough to the object to knock it over
+		else if(SensorValue[sonarSensor] < knockDistance){
 			stopMotors();
 			knock();
+			//If it manages to knock down an object it counts it
 			counter++;
-		}
-			else if(SensorValue[lineFollowerCENTER] < threshold) {
-      	SensorValue[rightEncoder]  = 0;
-      	turnright(170);
-      	motor[leftMotor] = highpower;
-      	motor[rightMotor] = highpower;
-      	wait1Msec(500);
 		}
 	}
 }
